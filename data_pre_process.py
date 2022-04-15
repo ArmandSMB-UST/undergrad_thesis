@@ -40,3 +40,32 @@ csvFile = "raw/Manila_data_2010_to_2021.csv"
 trimmedCSVFile = "raw/Manila_data_2010_to_2021_" + str(dt) + "h_resolution.csv"
 fieldnames = ['YYMMDDHH', 'PRECIP', 'WS10M']
 csv_ops.writeTrimmed(trimmedCSVFile, csvFile, dt, fieldnames)
+
+
+# =============================================================================
+#                           Define Coastlines
+# =============================================================================
+# This is to determine if landfall happened
+path = 'raw'
+config.save_coastal_data(path)
+
+# =============================================================================
+#                               JSON to CSV
+# =============================================================================
+import pandas as pd
+
+def jsonToCSV(file):
+    write_filename = 0
+    with open(file, encoding='utf-8') as inputfile:
+        df = pd.read_json(inputfile, orient='index')
+    
+        write_filename = file[0:len(file)-5] 
+    return write_filename
+
+nearest_point = 'processed/nearest-as-reference.json'
+landfall = 'processed/landfall-as-reference.json'
+
+write_filename = jsonToCSV(nearest_point)
+    
+df.to_csv(write_filename + '.csv', encoding='utf-8', index=True)
+

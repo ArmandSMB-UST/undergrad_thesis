@@ -73,7 +73,6 @@ def interpolateCoords(ups_list, phi_list):
     long = 0
     lat_0 = 0
     long_0 = 0
-    s_adj = 0
     latitude = np.array([])
     longitude = np.array([])
     for i in range(len(ups_list)):
@@ -123,6 +122,7 @@ def interpolateCoords(ups_list, phi_list):
     return latitude, longitude
         
 if __name__ == '__main__':
+    import config
     dt = 3
     pressure = ['1008', '1008', '1006', '1008', '1006', '1006', '1004', '1004',
        '1002', '1002', '1002', '1004', '1002', '1002', '1000', '1000',
@@ -132,8 +132,8 @@ if __name__ == '__main__':
     print(len(pressure))
     pressure = interpolateParameter(pressure)
     print(len(pressure))
+    
 # =============================================================================
-#     
 #     ups_in = [9.3, 10., 10.7, 11.7, 12.4, 13.4, 14.4, 15.2, 15.9, 16.7, 17.6,
 #            18.7, 19.3, 19.9, 19.5, 19.1, 18.9, 18.8, 18.6, 18.5, 18.8, 19.3,
 #            19.8, 20.3, 21. , 21.1, 21.1, 21.1, 20.7, 20.6, 20.4, 20.3, 20.1,

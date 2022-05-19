@@ -36,8 +36,8 @@ with open(textFile, "r") as myFile:
 # =============================================================================
 
 dt = config.dt
-csvFile = "raw/Manila_data_2010_to_2021.csv"
-trimmedCSVFile = "raw/Manila_data_2010_to_2021_" + str(dt) + "h_resolution.csv"
+csvFile = "raw/Science_Garden_data_2010_to_2021.csv"
+trimmedCSVFile = "raw/Science_Garden_data_2010_to_2021_" + str(dt) + "h_resolution.csv"
 fieldnames = ['YYMMDDHH', 'PRECIP', 'WS10M']
 csv_ops.writeTrimmed(trimmedCSVFile, csvFile, dt, fieldnames)
 
@@ -59,13 +59,10 @@ def jsonToCSV(file):
     with open(file, encoding='utf-8') as inputfile:
         df = pd.read_json(inputfile, orient='index')
     
-        write_filename = file[0:len(file)-5] 
-    return write_filename
+        write_filename = file[:len(file)-5] 
+    df.to_csv(write_filename + '_300.csv', encoding='utf-8', index=True)
 
-nearest_point = 'processed/nearest-as-reference.json'
+nearest_point = 'processed/science-garden-nearest-as-reference400.json'
 landfall = 'processed/landfall-as-reference.json'
 
-write_filename = jsonToCSV(nearest_point)
-    
-df.to_csv(write_filename + '.csv', encoding='utf-8', index=True)
-
+jsonToCSV(nearest_point)

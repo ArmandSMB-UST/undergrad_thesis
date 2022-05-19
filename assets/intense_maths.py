@@ -8,12 +8,15 @@ import math
 import assets.config as config
 import numpy as np
 
+earthDay = 24 * (60 * 60) # 24h to s
+
 # Variable simplification for easy reading
 t = config.dt
 dt = t
 cos = math.cos
 sin = math.sin
 sqrt = math.sqrt
+pi = math.pi
 sigma_1 = config.radius_equator
 sigma_2 = config.radius_polar
 lat_Manila = config.latManila
@@ -24,21 +27,36 @@ degToRad = lambda degree: degree * math.pi / 180
 lat_Manila = degToRad(lat_Manila)
 long_Manila = degToRad(long_Manila)
 
-def interpolateParameter(parameter_list):
+def interpolateParameter(parameter_list, intensity = False):
     n = 6 / dt
     parameter = np.array([])
     param = 0
     param_0 = 0
     for i in range(len(parameter_list)):
-        param = float(parameter_list[i])
-        if i > 0:
-            param_0 = float(parameter_list[i-1])
-            parameter = np.append(parameter, param_0)
+        if intensity == True:
+            param = int(parameter_list[i])
+            if i > 0:
+                param_0 = int(parameter_list[i-1])
+                parameter = np.append(parameter, param_0)
+                parameter = np.append(parameter, min(param, param_0))
             
-            param_avg = (param + param_0) / n
-            parameter = np.append(parameter, param_avg)
+        elif intensity == False:
+            param = float(parameter_list[i])
+            if i > 0:
+                param_0 = float(parameter_list[i-1])
+                parameter = np.append(parameter, param_0)
+                
+                param_avg = (param + param_0) / n
+                parameter = np.append(parameter, param_avg)
+     
     parameter = np.append(parameter, param)
     return parameter
+
+def interpolateIntensity(parameter_list):
+    n = 6 /dt
+    parameter = np.array([])
+    for i in range(len(parameter_list)):
+        param = int(parameter_list)
 
 def solveDistanceFromManila(lat, long):
     ins = vars()
@@ -64,6 +82,12 @@ def solveArcLength(lat_0, lat, long_0, long):
 def solveTranslationalVelocity(arc_length):
     v = arc_length / t
     return v
+
+def coriolisParameter(lat):
+    return (2*pi/earthDay)*sin(degToRad(lat))
+
+def corPamToLat(coriolisParam):
+    return radToDeg(math.asin(earthDay * coriolisParam / (2*pi) ))
 
 def interpolateCoords(ups_list, phi_list):
     n = 6 / dt

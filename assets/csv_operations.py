@@ -80,11 +80,11 @@ def writeTrimmed(newFilename, filename, hourInterval, fieldnames):
                     rowToWrite['YYMMDDHH'] = (row['YEAR'] +  row['MM'] +
                                                 row['DD'] +  row['HH'])
                     del rowToWrite['YEAR'], rowToWrite['MM'], \
-                        rowToWrite['DD'], rowToWrite['HH'], rowToWrite['PS']
+                        rowToWrite['DD'], rowToWrite['HH']
                     csv_writer.writerow(rowToWrite)
                         
 def skipHeader(file):
     i = 0
-    while i < 11:
+    while i < 10:
         i += 1
         next(file)
